@@ -22,3 +22,9 @@ coverage/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Ignore TypeScript build info file
+*.tsbuildinfo
+
+# Ignore dist folder
+dist/
