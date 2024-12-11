@@ -28,7 +28,7 @@ export default [
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/ban-ts-comment': 'warn',
       '@typescript-eslint/no-non-null-assertion': 'warn',
-      'no-console': ['warn', { allow: ['warn', 'error'] }],
+      'no-console': ['warn', { allow: ['warn', 'error', 'info'] }],
       'no-debugger': 'warn',
       'prefer-const': 'error',
       'consistent-return': 'warn',
@@ -38,7 +38,7 @@ export default [
       'import/named': 'error',
       'import/default': 'error',
       'import/no-duplicates': 'warn',
-      'import/order': ['warn', { 'newlines-between': 'always', alphabetize: { order: 'asc' } }],
+      'import/order': ['warn', { 'newlines-between': 'never', alphabetize: { order: 'asc' } }],
       'no-return-await': 'warn',
       'require-await': 'warn',
       'prettier/prettier': 'error',
@@ -54,5 +54,14 @@ export default [
   },
   {
     ignores: ['**/node_modules/**', '**/dist/**', '**/*.d.ts'],
+  },
+  {
+    settings: {
+      'import/resolver': {
+        typescript: {
+          project: './tsconfig.json',
+        },
+      },
+    },
   },
 ];

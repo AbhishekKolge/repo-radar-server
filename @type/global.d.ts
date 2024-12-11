@@ -27,8 +27,8 @@ declare namespace NodeJS {
   }
 }
 
-declare module 'express' {
-  export interface Request {
+declare namespace Express {
+  interface Request {
     user?: {
       id: string;
       isTestUser: boolean;
