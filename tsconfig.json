@@ -1,8 +1,8 @@
 {
   "extends": "@tsconfig/node18/tsconfig.json",
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "CommonJS",
+    "target": "ES2022",
+    "module": "ESNext",
     "moduleResolution": "Node",
     "outDir": "./dist",
     "rootDir": "./src",
@@ -24,7 +24,8 @@
     "incremental": true,
     "strictPropertyInitialization": true,
     "noImplicitReturns": true,
-    "noImplicitThis": true
+    "noImplicitThis": true,
+    "types": ["node"]
   },
   "ts-node": {
     "esm": true
