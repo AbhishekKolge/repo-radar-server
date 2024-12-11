@@ -1,0 +1,10 @@
+{
+  "watch": ["src"],
+  "ext": "ts,graphql",
+  "exec": "node --import tsx",
+  "ignore": ["src/**/*.spec.ts", "src/**/*.test.ts", "dist/**/*"],
+  "events": {
+    "restart": "clear"
+  },
+  "delay": "1000"
+}
