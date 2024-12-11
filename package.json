@@ -11,7 +11,9 @@
     "dev": "concurrently \"nodemon -r tsx src/index.ts\" \"graphql-codegen --config codegen.json --watch\"",
     "codegen": "graphql-codegen --config codegen.json",
     "lint": "eslint 'src/**/*.{ts,tsx}' --fix",
-    "format": "prettier --write 'src/**/*.{ts,tsx}'"
+    "format": "prettier --write 'src/**/*.{ts,tsx}'",
+    "seed-country": "tsx src/seed/country.ts",
+    "seed": "pnpm run seed-country"
   },
   "author": "Abhishek Kolge",
   "license": "MIT",
@@ -37,6 +39,7 @@
     "concurrently": "^9.1.0",
     "eslint": "^9.16.0",
     "eslint-config-prettier": "^9.1.0",
+    "eslint-import-resolver-typescript": "^3.7.0",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-prettier": "^5.2.1",
     "lint-staged": "^15.2.11",
@@ -53,6 +56,7 @@
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.5.1",
     "cors": "^2.8.5",
+    "csv-parser": "^3.0.0",
     "dataloader": "^2.2.3",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
