@@ -28,6 +28,3 @@ Thumbs.db
 
 # Ignore dist folder
 dist/
-
-# GraphQL
-src/generated/

@@ -41,3 +41,9 @@ declare module 'eslint-plugin-import' {
   const plugin: ESLint.Plugin;
   export = plugin;
 }
+
+declare module '*.graphql' {
+  import { DocumentNode } from 'graphql';
+  const value: DocumentNode;
+  export default value;
+}
