@@ -19,9 +19,6 @@ declare namespace NodeJS {
     SENDGRID_USER: string;
     TEST_USER_ID: string;
     TOKEN_EXPIRATION_TIME: string;
-    GOOGLE_CLIENT_ID: string;
-    GOOGLE_CLIENT_SECRET: string;
-    GOOGLE_CALLBACK_URL: string;
     ENCRYPT_IV: string;
     ENCRYPT_KEY: string;
   }

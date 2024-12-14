@@ -8,30 +8,37 @@ datasource db {
 }
 
 model User {
-  id                          String       @id @default(uuid())
-  name                        String
-  username                    String       @unique
-  email                       String       @unique
-  password                    String?
-  dob                         DateTime?    @db.Timestamptz
-  contactNumber               String?      @unique
-  contactCountry              Country?     @relation(fields: [contactCountryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  contactCountryId            String?
-  loginMethod                 LoginMethod
-  profileImageUrl             String?
-  profileImageId              String?
-  verificationCode            String?
-  verificationCodeExpiration  DateTime?    @db.Timestamptz
-  isVerified                  Boolean      @default(false)
-  verifiedAt                  DateTime?    @db.Timestamptz
-  resetPasswordCode           String?
-  resetPasswordCodeExpiration DateTime?    @db.Timestamptz
-  createdAt                   DateTime     @default(now()) @db.Timestamptz
-  updatedAt                   DateTime     @updatedAt @db.Timestamptz
-  notification                Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  notificationId              String       @unique
-  security                    Security     @relation(fields: [securityId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  securityId                  String       @unique
+  id                              String           @id @default(uuid())
+  name                            String?
+  username                        String           @unique
+  email                           String?          @unique
+  dob                             DateTime?        @db.Timestamptz
+  contactNumber                   String?          @unique
+  contactCountry                  Country?         @relation(fields: [contactCountryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  contactCountryId                String?
+  profileImageUrl                 String?
+  profileImageId                  String?
+  emailVerificationCode           String?
+  emailVerificationCodeExpiration DateTime?        @db.Timestamptz
+  isEmailVerified                 Boolean          @default(false)
+  verifiedAt                      DateTime?        @db.Timestamptz
+  createdAt                       DateTime         @default(now()) @db.Timestamptz
+  updatedAt                       DateTime         @updatedAt @db.Timestamptz
+  notification                    Notification     @relation(fields: [notificationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  notificationId                  String           @unique
+  security                        Security         @relation(fields: [securityId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  securityId                      String           @unique
+  repositories                    RepositoryUser[]
+  subscriptions                   Subscription[]
+}
+
+model Subscription {
+  id        String   @id @default(uuid())
+  endpoint  String   @unique
+  keys      Json
+  createdAt DateTime @default(now()) @db.Timestamptz
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId    String
 }
 
 model Country {
@@ -43,24 +50,65 @@ model Country {
 }
 
 model Notification {
-  id           String   @id @default(uuid())
-  releaseAlert Boolean  @default(false)
-  loginAlert   Boolean  @default(false)
-  createdAt    DateTime @default(now()) @db.Timestamptz
-  updatedAt    DateTime @updatedAt @db.Timestamptz
-  user         User?
+  id              String   @id @default(uuid())
+  releaseAlert    Boolean  @default(false)
+  loginEmailAlert Boolean  @default(false)
+  updatedAt       DateTime @updatedAt @db.Timestamptz
+  user            User?
 }
 
 model Security {
   id            String   @id @default(uuid())
   twoFactorAuth Boolean  @default(false)
-  createdAt     DateTime @default(now()) @db.Timestamptz
   updatedAt     DateTime @updatedAt @db.Timestamptz
   user          User?
 }
 
-enum LoginMethod {
-  GOOGLE
-  GITHUB
-  NORMAL
+model Repository {
+  id            String           @id @default(uuid())
+  name          String
+  owner         String
+  ownerUrl      String
+  ownerType     OwnerType
+  githubUrl     String
+  description   String?
+  addedAt       DateTime         @db.Timestamptz
+  httpsCloneUrl String
+  sshCloneUrl   String
+  homepage      String?
+  branch        String
+  users         RepositoryUser[]
+  releases      ReleaseInfo[]
+  createdAt     DateTime         @default(now()) @db.Timestamptz
+  updatedAt     DateTime         @updatedAt @db.Timestamptz
+
+  @@unique([name, owner])
+}
+
+model RepositoryUser {
+  id           String     @id @default(uuid())
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId       String
+  repository   Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  repositoryId String
+  archived     Boolean    @default(false)
+
+  @@unique([userId, repositoryId])
+}
+
+model ReleaseInfo {
+  id           String     @id @default(uuid())
+  version      String
+  url          String
+  notes        String
+  date         DateTime   @db.Timestamptz
+  repository   Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  repositoryId String
+  createdAt    DateTime   @default(now()) @db.Timestamptz
+  updatedAt    DateTime   @updatedAt @db.Timestamptz
+}
+
+enum OwnerType {
+  ORGANIZATION
+  USER
 }

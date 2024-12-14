@@ -1,15 +1,14 @@
 {
   "overwrite": true,
-  "schema": ["./src/modules/book/schema.graphql", "./src/modules/user/schema.graphql"],
+  "schema": ["./src/domain/modules/user/schema.graphql"],
   "documents": null,
   "generates": {
-    "src/graphql/types.ts": {
+    "src/domain/graphql/types.ts": {
       "plugins": ["typescript", "typescript-resolvers", "typescript-operations"],
       "config": {
-        "contextType": "../types/graphql#ResolverContext",
+        "contextType": "../shared/types/graphql#ResolverContext",
         "mappers": {
-          "Company": "../modules/book/types#CompanyEntity",
-          "Job": "../modules/user/types#JobEntity"
+          "User": "../modules/user/types/entity#UserEntity"
         },
         "skipTypename": true
       }

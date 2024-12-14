@@ -1,7 +1,8 @@
 import fs from 'fs';
 import csv from 'csv-parser';
-import prisma from '../database/prisma-client';
+import { prisma } from '../infrastructure/database/prisma-client';
 import { CountryCache, CountryRow } from './types';
+import { logger } from 'src/infrastructure/logging/logger';
 
 const filePath: string = 'data/country.csv';
 const countryCache: CountryCache = {};
@@ -34,12 +35,12 @@ fs.createReadStream(filePath)
       }
     } catch (error) {
       if (error instanceof Error) {
-        console.error('Error processing row:', error.message);
+        logger.error('Error processing row:', error.message);
       } else {
-        console.error('An unknown error occurred:', error);
+        logger.error('An unknown error occurred:', error);
       }
     }
   })
   .on('end', () => {
-    console.info('Country seeding completed');
+    logger.info('Country seeding completed');
   });

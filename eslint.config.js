@@ -28,9 +28,10 @@ export default [
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/ban-ts-comment': 'warn',
       '@typescript-eslint/no-non-null-assertion': 'warn',
-      'no-console': ['warn', { allow: ['warn', 'error', 'info'] }],
+      'no-console': 'warn',
       'no-debugger': 'warn',
       'prefer-const': 'error',
+      'no-var': 'error',
       'consistent-return': 'warn',
       'no-duplicate-imports': 'warn',
       eqeqeq: 'warn',
@@ -47,7 +48,7 @@ export default [
     },
   },
   {
-    files: ['src/graphql/types.ts'],
+    files: ['src/domain/graphql/types.ts'],
     rules: {
       'no-unused-vars': 'off',
       'no-console': 'off',

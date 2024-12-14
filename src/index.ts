@@ -1,32 +1,23 @@
-import { ApolloServer } from '@apollo/server';
-import { expressMiddleware as apolloMiddleware } from '@apollo/server/express4';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import express from 'express';
-import schema from './graphql/schema';
-import { createCompanyLoader } from './modules/user/controller';
-import { ResolverContext } from './types/graphql';
+import { Server } from './application/server';
+import { logger } from './infrastructure/logging/logger';
 
-dotenv.config();
+process.on('uncaughtException', (error: Error) => {
+  logger.error('Uncaught Exception:', error);
+  process.exit(1);
+});
 
-const app = express();
-app.use(express.json());
-app.use(cors());
+process.on('unhandledRejection', (reason: unknown) => {
+  logger.error('Unhandled Rejection:', reason);
+  process.exit(1);
+});
 
-function getContext(): Promise<ResolverContext> {
-  const companyLoader = createCompanyLoader();
-  const context: ResolverContext = { companyLoader };
-  context.user = {
-    id: '123',
-    isTestUser: true,
-  };
-  return Promise.resolve(context);
+async function bootstrap() {
+  try {
+    await Server.start();
+  } catch (error) {
+    logger.error('Failed to start server:', error);
+    process.exit(1);
+  }
 }
 
-const apolloServer = new ApolloServer({ schema });
-await apolloServer.start();
-app.use('/graphql', apolloMiddleware(apolloServer, { context: getContext }));
-
-app.listen(8000, () => {
-  console.info(`Running on Port 8000`);
-});
+bootstrap();
