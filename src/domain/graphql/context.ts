@@ -1,12 +1,12 @@
-import { ResolverContext } from '../shared/types/graphql';
+import { Request } from 'express';
+import { ResolverContext } from '../shared/types';
 
-export const getContext = (): Promise<ResolverContext> => {
-  //   const companyLoader = createCompanyLoader();
-  //   const context: ResolverContext = { companyLoader };
+export const getContext = ({ req }: { req: Request }): Promise<ResolverContext> => {
   const context: ResolverContext = {};
-  context.user = {
-    id: '123',
-    isTestUser: true,
-  };
+  if (req.user) {
+    context.user = {
+      ...req.user,
+    };
+  }
   return Promise.resolve(context);
 };

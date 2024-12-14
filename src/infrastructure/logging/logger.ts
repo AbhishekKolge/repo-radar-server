@@ -7,8 +7,8 @@ import {
   transports as winstonTransports,
   LeveledLogMethod,
 } from 'winston';
-import { env } from '../config/environment';
-import { LOGGER_COLORS, LOGGER_LEVELS } from 'src/shared/utils/default';
+import { env } from '../config';
+import { LOGGER_COLORS, LOGGER_LEVELS } from 'src/shared/utils';
 
 addColors(LOGGER_COLORS);
 

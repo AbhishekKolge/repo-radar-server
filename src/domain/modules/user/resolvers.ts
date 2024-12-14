@@ -1,5 +1,5 @@
 import { getUser } from './controllers';
-import { Resolvers } from 'src/domain/graphql/types';
+import { Resolvers } from 'src/domain/graphql';
 
 export const userResolvers: Resolvers = {
   Query: {

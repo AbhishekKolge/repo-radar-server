@@ -1,8 +1,8 @@
 import fs from 'fs';
 import csv from 'csv-parser';
-import { prisma } from '../infrastructure/database/prisma-client';
+import { prisma } from '../infrastructure/database';
 import { CountryCache, CountryRow } from './types';
-import { logger } from 'src/infrastructure/logging/logger';
+import { logger } from 'src/infrastructure/logging';
 
 const filePath: string = 'data/country.csv';
 const countryCache: CountryCache = {};

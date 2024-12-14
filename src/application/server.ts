@@ -1,8 +1,11 @@
-import { env } from 'src/infrastructure/config/environment';
-import { connectPrisma, disconnectPrisma } from 'src/infrastructure/database/prisma-client';
-import { logger } from 'src/infrastructure/logging/logger';
-import { createApolloServer, setupApolloMiddleware } from 'src/infrastructure/server/apollo';
-import { createExpressApp } from 'src/infrastructure/server/express';
+import { env } from 'src/infrastructure/config';
+import { connectPrisma, disconnectPrisma } from 'src/infrastructure/database';
+import { logger } from 'src/infrastructure/logging';
+import {
+  createApolloServer,
+  createExpressApp,
+  setupApolloMiddleware,
+} from 'src/infrastructure/server';
 
 export class Server {
   private constructor() {}

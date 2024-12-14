@@ -16,9 +16,7 @@ const userSchema = gql(
 const typeDefs = mergeTypeDefs([userSchema]);
 const resolvers = mergeResolvers([userResolvers]);
 
-const schema = makeExecutableSchema({
+export const schema = makeExecutableSchema({
   typeDefs,
   resolvers,
 });
-
-export default schema;

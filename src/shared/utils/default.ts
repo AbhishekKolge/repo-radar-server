@@ -1,3 +1,5 @@
+import { env } from 'src/infrastructure/config';
+
 export const LOGGER_LEVELS = {
   error: 0,
   warn: 1,
@@ -13,3 +15,5 @@ export const LOGGER_COLORS = {
   http: 'magenta',
   debug: 'white',
 };
+
+export const WHITELIST_ENDPOINTS = [env.FRONT_END_ORIGIN, env.LOCAL_FRONT_END_ORIGIN];

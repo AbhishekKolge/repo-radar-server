@@ -1,12 +1,14 @@
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import { Application } from 'express';
-import { getContext } from 'src/domain/graphql/context';
-import schema from 'src/domain/graphql/schema';
+import { errorHandler, notFound } from '../middleware';
+import { formatGraphQLError } from '../shared/utils';
+import { getContext, schema } from 'src/domain/graphql';
 
 export const createApolloServer = async (): Promise<ApolloServer> => {
   const server = new ApolloServer({
     schema,
+    formatError: formatGraphQLError,
   });
 
   await server.start();
@@ -20,4 +22,7 @@ export const setupApolloMiddleware = (app: Application, server: ApolloServer): v
       context: getContext,
     }),
   );
+
+  app.use(errorHandler);
+  app.use(notFound);
 };

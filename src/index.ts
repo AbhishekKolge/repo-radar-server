@@ -1,5 +1,5 @@
-import { Server } from './application/server';
-import { logger } from './infrastructure/logging/logger';
+import { Server } from './application';
+import { logger } from './infrastructure/logging';
 
 process.on('uncaughtException', (error: Error) => {
   logger.error('Uncaught Exception:', error);

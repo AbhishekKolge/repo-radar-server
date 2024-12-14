@@ -1,4 +1,4 @@
-import { UserEntity } from './types/entity';
+import { UserEntity } from './types';
 
 export const getUser = (): Promise<UserEntity> => {
   return new Promise((resolve) => {
