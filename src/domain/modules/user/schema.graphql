@@ -1,10 +1,29 @@
+directive @auth on FIELD_DEFINITION
+directive @validate(schema: String!) on FIELD_DEFINITION
+
 type Query {
-  user: User
+  user: User @auth
+}
+
+type Mutation {
+  createUser(input: CreateUserInput): User @auth @validate(schema: "user.createUserSchema")
 }
 
 type User {
   id: ID!
-  date: String!
-  title: String!
-  description: String
+  name: String
+  username: String!
+  email: String
+  dob: String
+  contactNumber: String
+  contactCountry: Country
+  profileImageUrl: String
+  profileImageId: String
+  isEmailVerified: Boolean
+}
+
+input CreateUserInput {
+  name: String!
+  email: String!
+  password: String!
 }

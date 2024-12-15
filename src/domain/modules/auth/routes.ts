@@ -5,7 +5,6 @@ import { GITHUB_FAILURE_REDIRECT, GITHUB_SCOPE, GITHUB_SESSION } from 'src/domai
 
 export const authRouter = express.Router();
 
-authRouter.route('/register').post(() => {});
 authRouter.route('/github').get(passport.authenticate('github', { scope: GITHUB_SCOPE }));
 authRouter.route('/github/callback').get(
   passport.authenticate('github', {

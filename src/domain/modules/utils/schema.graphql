@@ -1,0 +1,12 @@
+directive @auth on FIELD_DEFINITION
+
+type Query {
+  countries: [Country] @auth
+}
+
+type Country {
+  id: ID!
+  name: String
+  shortName: String
+  phoneCode: String
+}

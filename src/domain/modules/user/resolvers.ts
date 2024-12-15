@@ -1,16 +1,18 @@
-import { getUser } from './controllers';
 import { Resolvers } from 'src/domain/graphql';
 
 export const userResolvers: Resolvers = {
   Query: {
-    user: async () => {
-      const job = await getUser();
+    user: (_root, _, { user }) => {
+      console.log(user);
 
-      return job;
+      return null;
     },
   },
+  Mutation: {
+    createUser: (_root, { input }) => {
+      console.log({ input });
 
-  User: {
-    date: (user) => user.createdAt,
+      return null;
+    },
   },
 };

@@ -1,5 +1,6 @@
 import { GraphQLResolveInfo } from 'graphql';
 import { UserEntity } from '../modules/user/types/entity';
+import { CountryEntity } from '../modules/utils/types/entity';
 import { ResolverContext } from '../shared/types/graphql';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -17,15 +18,44 @@ export type Scalars = {
   Float: { input: number; output: number; }
 };
 
+export type Country = {
+  id: Scalars['ID']['output'];
+  name?: Maybe<Scalars['String']['output']>;
+  phoneCode?: Maybe<Scalars['String']['output']>;
+  shortName?: Maybe<Scalars['String']['output']>;
+};
+
+export type CreateUserInput = {
+  email: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+};
+
+export type Mutation = {
+  createUser?: Maybe<User>;
+};
+
+
+export type MutationCreateUserArgs = {
+  input?: InputMaybe<CreateUserInput>;
+};
+
 export type Query = {
+  countries?: Maybe<Array<Maybe<Country>>>;
   user?: Maybe<User>;
 };
 
 export type User = {
-  date: Scalars['String']['output'];
-  description?: Maybe<Scalars['String']['output']>;
+  contactCountry?: Maybe<Country>;
+  contactNumber?: Maybe<Scalars['String']['output']>;
+  dob?: Maybe<Scalars['String']['output']>;
+  email?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
-  title: Scalars['String']['output'];
+  isEmailVerified?: Maybe<Scalars['Boolean']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  profileImageId?: Maybe<Scalars['String']['output']>;
+  profileImageUrl?: Maybe<Scalars['String']['output']>;
+  username: Scalars['String']['output'];
 };
 
 
@@ -100,7 +130,10 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  Country: ResolverTypeWrapper<CountryEntity>;
+  CreateUserInput: CreateUserInput;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
+  Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   User: ResolverTypeWrapper<UserEntity>;
@@ -109,26 +142,64 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
+  Country: CountryEntity;
+  CreateUserInput: CreateUserInput;
   ID: Scalars['ID']['output'];
+  Mutation: {};
   Query: {};
   String: Scalars['String']['output'];
   User: UserEntity;
 };
 
+export type AuthDirectiveArgs = { };
+
+export type AuthDirectiveResolver<Result, Parent, ContextType = ResolverContext, Args = AuthDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+
+export type ValidateDirectiveArgs = {
+  schema: Scalars['String']['input'];
+};
+
+export type ValidateDirectiveResolver<Result, Parent, ContextType = ResolverContext, Args = ValidateDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+
+export type CountryResolvers<ContextType = ResolverContext, ParentType extends ResolversParentTypes['Country'] = ResolversParentTypes['Country']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  phoneCode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  shortName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type MutationResolvers<ContextType = ResolverContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  createUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, Partial<MutationCreateUserArgs>>;
+};
+
 export type QueryResolvers<ContextType = ResolverContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  countries?: Resolver<Maybe<Array<Maybe<ResolversTypes['Country']>>>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
 };
 
 export type UserResolvers<ContextType = ResolverContext, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
-  date?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  contactCountry?: Resolver<Maybe<ResolversTypes['Country']>, ParentType, ContextType>;
+  contactNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  dob?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  isEmailVerified?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  profileImageId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  profileImageUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = ResolverContext> = {
+  Country?: CountryResolvers<ContextType>;
+  Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
 };
 
+export type DirectiveResolvers<ContextType = ResolverContext> = {
+  auth?: AuthDirectiveResolver<any, any, ContextType>;
+  validate?: ValidateDirectiveResolver<any, any, ContextType>;
+};
