@@ -1,6 +1,3 @@
-export interface UserEntity {
-  id: string;
-  title: string;
-  description?: string;
-  createdAt: string;
-}
+import { User } from '@prisma/client';
+
+export type UserEntity = User;

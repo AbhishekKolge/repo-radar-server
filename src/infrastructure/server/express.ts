@@ -8,6 +8,7 @@ import { isProduction } from '../config';
 import { morganStream } from '../logging';
 import { corsSetup, rateLimiterSetup } from '../middleware';
 import { authRouter } from 'src/domain/modules/auth/routes';
+import { userRouter } from 'src/domain/modules/user/routes';
 
 export const createExpressApp = (): express.Application => {
   const app = express();
@@ -27,6 +28,7 @@ export const createExpressApp = (): express.Application => {
   app.use(rateLimiterSetup);
 
   app.use('/api/v1/auth', authRouter);
+  app.use('/api/v1/user', userRouter);
 
   return app;
 };

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { UserService } from './service';
+import { AuthService } from './service';
 import { GithubProfileDto } from './types';
 import { NotificationService } from 'src/domain/services';
 import { createTokenUser, getJWTToken } from 'src/infrastructure/shared/utils';
@@ -7,9 +7,9 @@ import { createTokenUser, getJWTToken } from 'src/infrastructure/shared/utils';
 export const githubLogin = async (req: Request, res: Response) => {
   try {
     const githubProfile = req.user as GithubProfileDto;
-    const userService = new UserService();
+    const authService = new AuthService();
 
-    const user = await userService.handleGithubLogin(githubProfile);
+    const user = await authService.handleGithubLogin(githubProfile);
 
     const tokenUser = createTokenUser({ ...user, githubToken: githubProfile.accessToken });
     const token = getJWTToken(tokenUser);
@@ -23,7 +23,7 @@ export const githubLogin = async (req: Request, res: Response) => {
 
     res.redirect(`${process.env.FRONT_END_ORIGIN}/auth/github?${successQueryString}`);
 
-    if (user.notification.loginEmailAlert) {
+    if (user.notification.loginEmailAlert && user.isEmailVerified) {
       const notificationService = new NotificationService();
       notificationService.sendLoginAlertNotificationEmail(user);
     }

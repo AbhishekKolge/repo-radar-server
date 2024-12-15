@@ -41,25 +41,9 @@ export class NotificationService {
     });
   }
 
-  async sendResetPasswordEmail(user: User, resetPasswordCode: string): Promise<void> {
-    const message = `<p>Your password reset code is ${resetPasswordCode}</p>`;
-    const html = `<h4>Hello, ${user.name}</h4> ${message}`;
-
-    if (!user.email) {
-      logger.error('Recipient email is required');
-      throw new BadRequestError('Recipient email is required');
-    }
-
-    await this.sendEmail({
-      to: user.email,
-      subject: `${this.appName} Reset Password Code`,
-      html,
-    });
-  }
-
   async sendVerificationEmail(user: User, verificationCode: string): Promise<void> {
     const message = `<p>Your email verification code is ${verificationCode}</p>`;
-    const html = `<h4>Hello, ${user.name}</h4> ${message}`;
+    const html = `<h4>Hello, ${user.name || user.username || 'User'}</h4> ${message}`;
 
     if (!user.email) {
       logger.error('Recipient email is required');
@@ -75,7 +59,7 @@ export class NotificationService {
 
   async sendLoginAlertNotificationEmail(user: User): Promise<void> {
     const message = `<p>Your account has been logged in on ${formattedUTCTime(currentTime())} UTC time</p>`;
-    const html = `<h4>Hello, ${user.name}</h4> ${message}`;
+    const html = `<h4>Hello, ${user.name || user.username || 'User'}</h4> ${message}`;
 
     if (!user.email) {
       logger.error('Recipient email is required');

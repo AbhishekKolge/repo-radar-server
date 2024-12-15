@@ -69,7 +69,7 @@ export const formatGraphQLError = (
         extensions: {
           ...formattedError.extensions,
           statusCode: StatusCodes.BAD_REQUEST,
-          code: 'VALIDATION_ERROR',
+          code: 'ZOD_ERROR',
         },
       };
     }

@@ -2,10 +2,9 @@ import { User, Prisma, Notification, Security } from '@prisma/client';
 import { GithubProfileDto } from './types';
 import { UploadService } from 'src/domain/services';
 import { prisma } from 'src/infrastructure/database';
-import { ConflictError, UnauthorizedError } from 'src/infrastructure/error';
-import { checkTimeExpired, hashString, currentTime } from 'src/shared/utils';
+import { currentTime } from 'src/shared/utils';
 
-export class UserService {
+export class AuthService {
   private async findOrCreateUser(
     githubProfile: GithubProfileDto,
   ): Promise<User & { notification: Notification; security: Security }> {
@@ -52,31 +51,5 @@ export class UserService {
     githubProfile: GithubProfileDto,
   ): Promise<User & { notification: Notification; security: Security }> {
     return this.findOrCreateUser(githubProfile);
-  }
-
-  public compareEmailVerificationCode(user: User, code: string): void {
-    if (!user.emailVerificationCodeExpiration || !user.emailVerificationCode) {
-      throw new UnauthorizedError('Please generate verification code');
-    }
-    const isExpired = checkTimeExpired(user.emailVerificationCodeExpiration);
-
-    if (isExpired) {
-      throw new UnauthorizedError('Verification code has expired');
-    }
-
-    const isMatch = user.emailVerificationCode === hashString(code);
-
-    if (!isMatch) {
-      throw new UnauthorizedError('Verification failed');
-    }
-  }
-
-  public checkEmailVerificationCodeValidity(user: User) {
-    if (user.emailVerificationCodeExpiration) {
-      const isExpired = checkTimeExpired(user.emailVerificationCodeExpiration);
-      if (!isExpired && user.emailVerificationCode) {
-        throw new ConflictError('Verification code already sent');
-      }
-    }
   }
 }

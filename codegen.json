@@ -1,6 +1,9 @@
 {
   "overwrite": true,
-  "schema": ["./src/domain/modules/user/schema.graphql"],
+  "schema": [
+    "./src/domain/modules/user/schema.graphql",
+    "./src/domain/modules/utils/schema.graphql"
+  ],
   "documents": null,
   "generates": {
     "src/domain/graphql/types.ts": {
@@ -8,7 +11,8 @@
       "config": {
         "contextType": "../shared/types/graphql#ResolverContext",
         "mappers": {
-          "User": "../modules/user/types/entity#UserEntity"
+          "User": "../modules/user/types/entity#UserEntity",
+          "Country": "../modules/utils/types/entity#CountryEntity"
         },
         "skipTypename": true
       }
