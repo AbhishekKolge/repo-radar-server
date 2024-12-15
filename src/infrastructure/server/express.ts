@@ -1,6 +1,7 @@
 import 'express-async-errors';
 
 import express from 'express';
+import fileUpload from 'express-fileupload';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import { isProduction } from '../config';
@@ -17,6 +18,11 @@ export const createExpressApp = (): express.Application => {
   }
   app.use(express.json());
   app.use(corsSetup);
+  app.use(
+    fileUpload({
+      useTempFiles: true,
+    }),
+  );
   app.use(morgan('combined', { stream: morganStream }));
   app.use(rateLimiterSetup);
 

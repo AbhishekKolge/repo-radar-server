@@ -4,6 +4,7 @@ import { StatusCodes } from 'http-status-codes';
 import { ZodError, ZodFormattedError } from 'zod';
 import { CustomAPIError } from 'src/infrastructure/error';
 import { logger } from 'src/infrastructure/logging';
+import { GRAPHQL_CODE_STATUS_MAP } from 'src/shared/utils';
 
 export const formatZodErrors = (error: ZodError): string => {
   const formattedErrors: string[] = [];
@@ -41,6 +42,7 @@ export const formatGraphQLError = (
         extensions: {
           ...formattedError.extensions,
           statusCode: customError.statusCode,
+          code: 'CUSTOM_ERROR',
         },
       };
     }
@@ -53,6 +55,7 @@ export const formatGraphQLError = (
         extensions: {
           ...formattedError.extensions,
           statusCode: prismaError.statusCode,
+          code: 'PRISMA_ERROR',
         },
       };
     }
@@ -66,6 +69,7 @@ export const formatGraphQLError = (
         extensions: {
           ...formattedError.extensions,
           statusCode: StatusCodes.BAD_REQUEST,
+          code: 'VALIDATION_ERROR',
         },
       };
     }
@@ -77,17 +81,24 @@ export const formatGraphQLError = (
         extensions: {
           ...formattedError.extensions,
           statusCode: StatusCodes.BAD_REQUEST,
+          code: 'INPUT_VALIDATION_ERROR',
         },
       };
     }
   }
+
+  const statusCode =
+    formattedError.extensions?.code && typeof formattedError.extensions.code === 'string'
+      ? (GRAPHQL_CODE_STATUS_MAP[formattedError.extensions.code] ??
+        StatusCodes.INTERNAL_SERVER_ERROR)
+      : StatusCodes.INTERNAL_SERVER_ERROR;
 
   return {
     ...formattedError,
     message: formattedError.message || 'Something went wrong, please try again',
     extensions: {
       ...formattedError.extensions,
-      statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
+      statusCode,
     },
   };
 };
