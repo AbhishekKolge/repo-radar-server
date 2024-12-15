@@ -21,14 +21,22 @@ declare namespace NodeJS {
     TOKEN_EXPIRATION_TIME: string;
     ENCRYPT_IV: string;
     ENCRYPT_KEY: string;
+    GITHUB_CLIENT_ID: string;
+    GITHUB_CLIENT_SECRET: string;
+    GITHUB_CALLBACK_URL: sting;
   }
 }
 
 declare namespace Express {
   interface Request {
     user?: {
-      id: string;
-      isTestUser: boolean;
+      id?: string;
+      githubToken?: string;
+      isTestUser?: boolean;
+      name?: string;
+      username?: string;
+      profileImageUrl?: string;
+      accessToken?: string;
     };
   }
 }
