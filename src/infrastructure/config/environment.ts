@@ -25,6 +25,9 @@ const envSchema = z.object({
   TOKEN_EXPIRATION_TIME: z.string().min(1),
   ENCRYPT_IV: z.string().min(1),
   ENCRYPT_KEY: z.string().min(1),
+  GITHUB_CLIENT_ID: z.string().min(1),
+  GITHUB_CLIENT_SECRET: z.string().min(1),
+  GITHUB_CALLBACK_URL: z.string().min(1),
 });
 
 export const env = envSchema.parse(process.env);

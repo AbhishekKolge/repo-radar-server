@@ -6,6 +6,8 @@ export const checkTestUser = (userId: string): boolean => {
   return isTestUser;
 };
 
-export const createTokenUser = <T extends { id: string }>(user: T): TokenUser => {
-  return { id: user.id };
+export const createTokenUser = <T extends { id: string; githubToken: string }>(
+  user: T,
+): TokenUser => {
+  return { id: user.id, githubToken: user.githubToken };
 };

@@ -17,7 +17,7 @@ export const authenticateUser = (req: Request, _res: Response, next: NextFunctio
   try {
     const user = isTokenValid(token);
     const isTestUser = checkTestUser(user.id);
-    req.user = { id: user.id, isTestUser };
+    req.user = { id: user.id, githubToken: user.githubToken, isTestUser };
     return next();
   } catch {
     throw new UnauthenticatedError('Authentication invalid');
