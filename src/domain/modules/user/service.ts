@@ -22,7 +22,7 @@ import {
 } from 'src/shared/utils';
 
 export class UserService {
-  private async getUserById(id: string): Promise<User> {
+  public async getUserById(id: string): Promise<User> {
     const user = await prisma.user.findUnique({
       where: { id },
     });
@@ -34,13 +34,27 @@ export class UserService {
     return user;
   }
 
-  private async updateUserById(id: string, data: Prisma.UserUpdateInput): Promise<void> {
-    await prisma.user.update({
+  public async updateUserById(id: string, data: Prisma.UserUncheckedUpdateInput): Promise<User> {
+    const user = await prisma.user.update({
       data,
       where: {
         id,
       },
     });
+    return user;
+  }
+
+  public async deleteProfile(id: string): Promise<void> {
+    const user = await prisma.user.delete({
+      where: {
+        id,
+      },
+    });
+
+    if (user.profileImageId) {
+      const uploadService = new UploadService();
+      await uploadService.deleteImage(user.profileImageId);
+    }
   }
 
   public async getEmailVerificationOtp(

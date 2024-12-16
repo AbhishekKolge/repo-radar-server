@@ -1,12 +1,16 @@
 directive @auth on FIELD_DEFINITION
 directive @validate(schema: String!) on FIELD_DEFINITION
+directive @prismaValidate(model: String!, operation: String!) on FIELD_DEFINITION
 
 type Query {
-  user: User @auth
+  profile: User @auth
 }
 
 type Mutation {
-  createUser(input: CreateUserInput): User @auth @validate(schema: "user.createUserSchema")
+  updateProfile(input: UpdateProfileInput!): User
+    @auth
+    @validate(schema: "user.updateProfileSchema")
+    @prismaValidate(model: "User", operation: "update")
 }
 
 type User {
@@ -22,8 +26,10 @@ type User {
   isEmailVerified: Boolean
 }
 
-input CreateUserInput {
-  name: String!
-  email: String!
-  password: String!
+input UpdateProfileInput {
+  name: String
+  email: String
+  dob: String
+  contactNumber: String
+  contactCountryId: String
 }

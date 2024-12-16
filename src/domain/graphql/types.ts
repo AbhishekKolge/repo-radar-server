@@ -1,7 +1,7 @@
 import { GraphQLResolveInfo } from 'graphql';
 import { UserEntity } from '../modules/user/types/entity';
 import { CountryEntity } from '../modules/utils/types/entity';
-import { ResolverContext } from '../shared/types/graphql';
+import { ResolverContext } from '../shared/types/common/graphql';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -9,6 +9,7 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: 
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string; }
@@ -25,24 +26,26 @@ export type Country = {
   shortName?: Maybe<Scalars['String']['output']>;
 };
 
-export type CreateUserInput = {
-  email: Scalars['String']['input'];
-  name: Scalars['String']['input'];
-  password: Scalars['String']['input'];
-};
-
 export type Mutation = {
-  createUser?: Maybe<User>;
+  updateProfile?: Maybe<User>;
 };
 
 
-export type MutationCreateUserArgs = {
-  input?: InputMaybe<CreateUserInput>;
+export type MutationUpdateProfileArgs = {
+  input: UpdateProfileInput;
 };
 
 export type Query = {
   countries?: Maybe<Array<Maybe<Country>>>;
-  user?: Maybe<User>;
+  profile?: Maybe<User>;
+};
+
+export type UpdateProfileInput = {
+  contactCountryId?: InputMaybe<Scalars['String']['input']>;
+  contactNumber?: InputMaybe<Scalars['String']['input']>;
+  dob?: InputMaybe<Scalars['String']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type User = {
@@ -131,11 +134,11 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   Country: ResolverTypeWrapper<CountryEntity>;
-  CreateUserInput: CreateUserInput;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  UpdateProfileInput: UpdateProfileInput;
   User: ResolverTypeWrapper<UserEntity>;
 };
 
@@ -143,17 +146,24 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
   Country: CountryEntity;
-  CreateUserInput: CreateUserInput;
   ID: Scalars['ID']['output'];
   Mutation: {};
   Query: {};
   String: Scalars['String']['output'];
+  UpdateProfileInput: UpdateProfileInput;
   User: UserEntity;
 };
 
 export type AuthDirectiveArgs = { };
 
 export type AuthDirectiveResolver<Result, Parent, ContextType = ResolverContext, Args = AuthDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+
+export type PrismaValidateDirectiveArgs = {
+  model: Scalars['String']['input'];
+  operation: Scalars['String']['input'];
+};
+
+export type PrismaValidateDirectiveResolver<Result, Parent, ContextType = ResolverContext, Args = PrismaValidateDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
 export type ValidateDirectiveArgs = {
   schema: Scalars['String']['input'];
@@ -170,12 +180,12 @@ export type CountryResolvers<ContextType = ResolverContext, ParentType extends R
 };
 
 export type MutationResolvers<ContextType = ResolverContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  createUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, Partial<MutationCreateUserArgs>>;
+  updateProfile?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateProfileArgs, 'input'>>;
 };
 
 export type QueryResolvers<ContextType = ResolverContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   countries?: Resolver<Maybe<Array<Maybe<ResolversTypes['Country']>>>, ParentType, ContextType>;
-  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  profile?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
 };
 
 export type UserResolvers<ContextType = ResolverContext, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
@@ -201,5 +211,6 @@ export type Resolvers<ContextType = ResolverContext> = {
 
 export type DirectiveResolvers<ContextType = ResolverContext> = {
   auth?: AuthDirectiveResolver<any, any, ContextType>;
+  prismaValidate?: PrismaValidateDirectiveResolver<any, any, ContextType>;
   validate?: ValidateDirectiveResolver<any, any, ContextType>;
 };

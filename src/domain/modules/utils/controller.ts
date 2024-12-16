@@ -1,7 +1,6 @@
 import { CountryService } from './service';
 
-export const getCountries = async () => {
+export const getCountries = () => {
   const countryService = new CountryService();
-  const data = await countryService.getCountries();
-  return data;
+  return countryService.getCountries();
 };

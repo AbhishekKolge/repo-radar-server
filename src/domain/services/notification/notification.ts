@@ -1,6 +1,6 @@
 import { User } from '@prisma/client';
 import nodemailer from 'nodemailer';
-import { EmailOptions } from 'src/domain/shared/types/notification';
+import { EmailOptions } from 'src/domain/shared/types';
 import { env, isProduction } from 'src/infrastructure/config';
 import { BadRequestError } from 'src/infrastructure/error';
 import { logger } from 'src/infrastructure/logging';

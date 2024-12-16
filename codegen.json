@@ -9,7 +9,7 @@
     "src/domain/graphql/types.ts": {
       "plugins": ["typescript", "typescript-resolvers", "typescript-operations"],
       "config": {
-        "contextType": "../shared/types/graphql#ResolverContext",
+        "contextType": "../shared/types/common/graphql#ResolverContext",
         "mappers": {
           "User": "../modules/user/types/entity#UserEntity",
           "Country": "../modules/utils/types/entity#CountryEntity"

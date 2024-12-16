@@ -1,4 +1,5 @@
 import { mapSchema, getDirective, MapperKind } from '@graphql-tools/utils';
+import { PrismaClient } from '@prisma/client';
 import { defaultFieldResolver, GraphQLSchema, GraphQLError } from 'graphql';
 import { ZodSchema, ZodError } from 'zod';
 import * as userSchemas from '../modules/user/validation';
@@ -11,6 +12,28 @@ type AllSchemas = {
 
 const allSchemas: AllSchemas = {
   user: userSchemas,
+};
+
+type PrismaModelOperations = 'create' | 'update';
+
+type PrismaInputTypes = {
+  User: {
+    create: Parameters<PrismaClient['user']['create']>[0]['data'];
+    update: Parameters<PrismaClient['user']['update']>[0]['data'];
+  };
+};
+
+type PrismaTypeMap = {
+  [K in keyof PrismaInputTypes]?: {
+    [O in PrismaModelOperations]?: PrismaInputTypes[K][O];
+  };
+};
+
+const prismaTypeMap: PrismaTypeMap = {
+  User: {
+    create: {} as PrismaInputTypes['User']['create'],
+    update: {} as PrismaInputTypes['User']['update'],
+  },
 };
 
 export function authDirectiveTransformer(schema: GraphQLSchema) {
@@ -36,36 +59,59 @@ export function validateDirectiveTransformer(schema: GraphQLSchema) {
   return mapSchema(schema, {
     [MapperKind.OBJECT_FIELD]: (fieldConfig) => {
       const validateDirective = getDirective(schema, fieldConfig, 'validate');
+      const prismaValidateDirective = getDirective(schema, fieldConfig, 'prismaValidate');
 
-      if (validateDirective) {
+      if (validateDirective || prismaValidateDirective) {
         const { resolve = defaultFieldResolver } = fieldConfig;
         fieldConfig.resolve = function (source, args, context, info) {
-          const [moduleName, schemaName] = validateDirective[0].schema.split('.');
-          const moduleSchemas = allSchemas[moduleName];
-
-          if (!moduleSchemas) {
-            throw new GraphQLError(`Module '${moduleName}' not found`, {
-              extensions: { code: 'VALIDATION_ERROR' },
-            });
-          }
-
-          const validationSchema: ZodSchema | undefined = moduleSchemas[schemaName];
-
-          if (!validationSchema) {
-            throw new GraphQLError(
-              `Validation schema '${schemaName}' not found in module '${moduleName}'`,
-              {
+          if (validateDirective) {
+            const [moduleName, schemaName] = validateDirective[0].schema.split('.');
+            const moduleSchemas = allSchemas[moduleName];
+            if (!moduleSchemas) {
+              throw new GraphQLError(`Module '${moduleName}' not found`, {
                 extensions: { code: 'VALIDATION_ERROR' },
-              },
-            );
-          }
-
-          try {
-            validationSchema.parse(args);
-          } catch (error) {
-            if (error instanceof ZodError) {
-              throw error;
+              });
             }
+            const validationSchema: ZodSchema | undefined = moduleSchemas[schemaName];
+            if (!validationSchema) {
+              throw new GraphQLError(
+                `Validation schema '${schemaName}' not found in module '${moduleName}'`,
+                {
+                  extensions: { code: 'VALIDATION_ERROR' },
+                },
+              );
+            }
+            try {
+              validationSchema.parse(args);
+            } catch (error) {
+              if (error instanceof ZodError) {
+                throw error;
+              }
+            }
+          }
+          if (prismaValidateDirective) {
+            const modelName = prismaValidateDirective[0].model as keyof PrismaInputTypes;
+            const operation = prismaValidateDirective[0].operation as PrismaModelOperations;
+            const prismaType = prismaTypeMap[modelName]?.[operation];
+
+            if (!prismaType) {
+              throw new GraphQLError(
+                `Prisma type for model '${modelName}' and operation '${operation}' not found`,
+                {
+                  extensions: { code: 'VALIDATION_ERROR' },
+                },
+              );
+            }
+
+            function assertPrismaInput<T>(input: unknown): asserts input is T {
+              if (typeof input !== 'object' || input === null) {
+                throw new GraphQLError('Invalid input: expected an object', {
+                  extensions: { code: 'VALIDATION_ERROR' },
+                });
+              }
+            }
+
+            assertPrismaInput<typeof prismaType>(args.input);
           }
 
           return resolve(source, args, context, info);

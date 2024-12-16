@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { AuthService } from './service';
 import { GithubProfileDto } from './types';
 import { NotificationService } from 'src/domain/services';
+import { logger } from 'src/infrastructure/logging';
 import { createTokenUser, getJWTToken } from 'src/infrastructure/shared/utils';
 
 export const githubLogin = async (req: Request, res: Response) => {
@@ -23,15 +24,16 @@ export const githubLogin = async (req: Request, res: Response) => {
 
     res.redirect(`${process.env.FRONT_END_ORIGIN}/auth/github?${successQueryString}`);
 
-    if (user.notification.loginEmailAlert && user.isEmailVerified) {
+    if (user.notification?.loginEmailAlert && user.isEmailVerified) {
       const notificationService = new NotificationService();
       notificationService.sendLoginAlertNotificationEmail(user);
     }
-  } catch {
+  } catch (error) {
     const failure = {
       success: String(false),
     };
     const failureQueryString = new URLSearchParams(failure).toString();
     res.redirect(`${process.env.FRONT_END_ORIGIN}/auth/github?${failureQueryString}`);
+    logger.error(error);
   }
 };
