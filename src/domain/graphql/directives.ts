@@ -2,6 +2,8 @@ import { mapSchema, getDirective, MapperKind } from '@graphql-tools/utils';
 import { PrismaClient } from '@prisma/client';
 import { defaultFieldResolver, GraphQLSchema, GraphQLError } from 'graphql';
 import { ZodSchema, ZodError } from 'zod';
+import * as preferenceSchemas from '../modules/preference/validation';
+import * as securitySchemas from '../modules/security/validation';
 import * as userSchemas from '../modules/user/validation';
 import { UnauthenticatedError } from 'src/infrastructure/error';
 
@@ -12,6 +14,8 @@ type AllSchemas = {
 
 const allSchemas: AllSchemas = {
   user: userSchemas,
+  security: securitySchemas,
+  preference: preferenceSchemas,
 };
 
 type PrismaModelOperations = 'create' | 'update';
@@ -20,6 +24,14 @@ type PrismaInputTypes = {
   User: {
     create: Parameters<PrismaClient['user']['create']>[0]['data'];
     update: Parameters<PrismaClient['user']['update']>[0]['data'];
+  };
+  Security: {
+    create: Parameters<PrismaClient['security']['create']>[0]['data'];
+    update: Parameters<PrismaClient['security']['update']>[0]['data'];
+  };
+  Notification: {
+    create: Parameters<PrismaClient['notification']['create']>[0]['data'];
+    update: Parameters<PrismaClient['notification']['update']>[0]['data'];
   };
 };
 
@@ -33,6 +45,14 @@ const prismaTypeMap: PrismaTypeMap = {
   User: {
     create: {} as PrismaInputTypes['User']['create'],
     update: {} as PrismaInputTypes['User']['update'],
+  },
+  Security: {
+    create: {} as PrismaInputTypes['Security']['create'],
+    update: {} as PrismaInputTypes['Security']['update'],
+  },
+  Notification: {
+    create: {} as PrismaInputTypes['Notification']['create'],
+    update: {} as PrismaInputTypes['Notification']['update'],
   },
 };
 

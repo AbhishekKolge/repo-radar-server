@@ -2,7 +2,9 @@
   "overwrite": true,
   "schema": [
     "./src/domain/modules/user/schema.graphql",
-    "./src/domain/modules/utils/schema.graphql"
+    "./src/domain/modules/utils/schema.graphql",
+    "./src/domain/modules/security/schema.graphql",
+    "./src/domain/modules/preference/schema.graphql"
   ],
   "documents": null,
   "generates": {
@@ -12,7 +14,9 @@
         "contextType": "../shared/types/common/graphql#ResolverContext",
         "mappers": {
           "User": "../modules/user/types/entity#UserEntity",
-          "Country": "../modules/utils/types/entity#CountryEntity"
+          "Country": "../modules/utils/types/entity#CountryEntity",
+          "Security": "../modules/security/types/entity#SecurityEntity",
+          "Preference": "../modules/preference/types/entity#PreferenceEntity"
         },
         "skipTypename": true
       }

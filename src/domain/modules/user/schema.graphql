@@ -23,7 +23,7 @@ type User {
   contactCountry: Country
   profileImageUrl: String
   profileImageId: String
-  isEmailVerified: Boolean
+  isEmailVerified: Boolean!
 }
 
 input UpdateProfileInput {

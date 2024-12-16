@@ -1,0 +1,26 @@
+directive @auth on FIELD_DEFINITION
+directive @validate(schema: String!) on FIELD_DEFINITION
+directive @prismaValidate(model: String!, operation: String!) on FIELD_DEFINITION
+
+type Query {
+  preference: Preference @auth
+}
+
+type Mutation {
+  updatePreference(input: UpdatePreferenceInput!): Preference
+    @auth
+    @validate(schema: "preference.updatePreferenceSchema")
+    @prismaValidate(model: "Notification", operation: "update")
+}
+
+type Preference {
+  id: ID!
+  releaseAlert: Boolean!
+  loginEmailAlert: Boolean!
+  updatedAt: String!
+}
+
+input UpdatePreferenceInput {
+  releaseAlert: Boolean!
+  loginEmailAlert: Boolean!
+}
