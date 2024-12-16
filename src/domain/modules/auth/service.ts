@@ -1,4 +1,4 @@
-import { User, Prisma, Notification, Security } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { GithubProfileDto } from './types';
 import { OctokitService, UploadService } from 'src/domain/services';
 import { prisma } from 'src/infrastructure/database';

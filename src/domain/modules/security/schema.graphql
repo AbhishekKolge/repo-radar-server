@@ -1,0 +1,24 @@
+directive @auth on FIELD_DEFINITION
+directive @validate(schema: String!) on FIELD_DEFINITION
+directive @prismaValidate(model: String!, operation: String!) on FIELD_DEFINITION
+
+type Query {
+  security: Security @auth
+}
+
+type Mutation {
+  updateSecurity(input: UpdateSecurityInput!): Security
+    @auth
+    @validate(schema: "security.updateSecuritySchema")
+    @prismaValidate(model: "Security", operation: "update")
+}
+
+type Security {
+  id: ID!
+  twoFactorAuth: Boolean!
+  updatedAt: String!
+}
+
+input UpdateSecurityInput {
+  twoFactorAuth: Boolean!
+}

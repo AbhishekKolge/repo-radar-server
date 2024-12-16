@@ -6,7 +6,7 @@ type Query {
 
 type Country {
   id: ID!
-  name: String
-  shortName: String
-  phoneCode: String
+  name: String!
+  shortName: String!
+  phoneCode: String!
 }
