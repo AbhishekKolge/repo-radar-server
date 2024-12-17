@@ -92,6 +92,7 @@ model RepositoryUser {
   repository   Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   repositoryId String
   archived     Boolean    @default(false)
+  viewed       Boolean    @default(false)
 
   @@unique([userId, repositoryId])
 }
@@ -101,7 +102,7 @@ model ReleaseInfo {
   version      String
   url          String
   notes        String?
-  date         DateTime?   @db.Timestamptz
+  date         DateTime?  @db.Timestamptz
   repository   Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   repositoryId String
   createdAt    DateTime   @default(now()) @db.Timestamptz

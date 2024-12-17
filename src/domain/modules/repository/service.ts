@@ -1,5 +1,5 @@
 import { components } from '@octokit/openapi-types';
-import { Prisma, ReleaseInfo, Repository } from '@prisma/client';
+import { Prisma, ReleaseInfo, Repository, RepositoryUser } from '@prisma/client';
 import {
   CommitResponse,
   ExtractedRepositoryDetails,
@@ -101,7 +101,7 @@ export class RepositoryService {
   public async getRepositoryStatus(
     userIds: readonly string[],
     keys: readonly [string, string][],
-  ): Promise<boolean[]> {
+  ): Promise<RepositoryUser[]> {
     const repositoryStatus = await prisma.repositoryUser.findMany({
       where: {
         userId: {
@@ -115,15 +115,13 @@ export class RepositoryService {
 
     const statusByUserId = repositoryStatus.reduce(
       (acc, repository) => {
-        acc[`${repository.repositoryId}:${repository.userId}`] = repository.archived;
+        acc[`${repository.repositoryId}:${repository.userId}`] = repository;
         return acc;
       },
-      {} as Record<string, boolean>,
+      {} as Record<string, RepositoryUser>,
     );
 
-    return keys.map(
-      ([repositoryId, userId]) => statusByUserId[`${repositoryId}:${userId}`] || false,
-    );
+    return keys.map(([repositoryId, userId]) => statusByUserId[`${repositoryId}:${userId}`]);
   }
 
   public async getRecentTenReleasesByRepositoryIds(
@@ -175,6 +173,7 @@ export class RepositoryService {
           some: {
             userId,
             archived: query?.archived,
+            viewed: query?.viewed,
           },
         },
       })

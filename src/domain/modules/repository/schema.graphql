@@ -41,6 +41,7 @@ type Repository {
   branch: String!
   latestRelease: ReleaseInfo
   archived: Boolean!
+  viewed: Boolean!
   releases: [ReleaseInfo]
   commits: [Commit]
 }
@@ -60,6 +61,7 @@ input AddRepositoryInput {
 
 input UpdateRepositoryStatusInput {
   archived: Boolean!
+  viewed: Boolean!
 }
 
 input RepositoryQueryParams {
@@ -68,6 +70,7 @@ input RepositoryQueryParams {
   sortMethod: String
   search: String
   archived: Boolean
+  viewed: Boolean
 }
 
 enum OwnerType {

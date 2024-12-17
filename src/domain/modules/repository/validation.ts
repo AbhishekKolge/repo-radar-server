@@ -23,6 +23,7 @@ export const repositoriesQuerySchema = z.object({
       sortMethod: z.string().trim().optional().nullable(),
       search: z.string().trim().optional().nullable(),
       archived: z.boolean().optional().nullable(),
+      viewed: z.boolean().optional().nullable(),
     })
     .optional()
     .nullable(),
@@ -32,5 +33,6 @@ export const updateRepositoryStatusSchema = z.object({
   id: z.string(),
   input: z.object({
     archived: z.boolean(),
+    viewed: z.boolean(),
   }),
 });
