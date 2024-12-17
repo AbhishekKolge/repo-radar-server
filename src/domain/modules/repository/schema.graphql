@@ -1,0 +1,82 @@
+directive @auth on FIELD_DEFINITION
+directive @validate(schema: String!) on FIELD_DEFINITION
+
+type Query {
+  repositories(query: RepositoryQueryParams): RepositoriesPaginatedResult
+    @auth
+    @validate(schema: "repository.repositoriesQuerySchema")
+  repository(id: ID!): Repository @auth
+}
+
+type Mutation {
+  addRepository(input: AddRepositoryInput!): Repository
+    @auth
+    @validate(schema: "repository.addRepositorySchema")
+
+  updateRepositoryStatus(id: ID!, input: UpdateRepositoryStatusInput!): Repository
+    @auth
+    @validate(schema: "repository.updateRepositoryStatusSchema")
+}
+
+type ReleaseInfo {
+  id: ID!
+  version: String!
+  url: String!
+  notes: String
+  date: String
+}
+
+type Repository {
+  id: ID!
+  name: String!
+  owner: String!
+  ownerUrl: String!
+  ownerType: OwnerType!
+  githubUrl: String!
+  description: String
+  addedAt: String!
+  httpsCloneUrl: String!
+  sshCloneUrl: String!
+  homepage: String
+  branch: String!
+  latestRelease: ReleaseInfo
+  archived: Boolean!
+  releases: [ReleaseInfo]
+  commits: [Commit]
+}
+
+type Commit {
+  id: ID!
+  url: String!
+  committer: String
+  author: String
+  message: String!
+  verified: Boolean
+}
+
+input AddRepositoryInput {
+  url: String!
+}
+
+input UpdateRepositoryStatusInput {
+  archived: Boolean!
+}
+
+input RepositoryQueryParams {
+  page: Int
+  sortKey: String
+  sortMethod: String
+  search: String
+  archived: Boolean
+}
+
+enum OwnerType {
+  ORGANIZATION
+  USER
+}
+
+type RepositoriesPaginatedResult {
+  data: [Repository]
+  totalPages: Int
+  totalCount: Int
+}

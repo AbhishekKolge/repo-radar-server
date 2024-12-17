@@ -3,6 +3,7 @@ import { PrismaClient } from '@prisma/client';
 import { defaultFieldResolver, GraphQLSchema, GraphQLError } from 'graphql';
 import { ZodSchema, ZodError } from 'zod';
 import * as preferenceSchemas from '../modules/preference/validation';
+import * as repositorySchemas from '../modules/repository/validation';
 import * as securitySchemas from '../modules/security/validation';
 import * as userSchemas from '../modules/user/validation';
 import { UnauthenticatedError } from 'src/infrastructure/error';
@@ -16,6 +17,7 @@ const allSchemas: AllSchemas = {
   user: userSchemas,
   security: securitySchemas,
   preference: preferenceSchemas,
+  repository: repositorySchemas,
 };
 
 type PrismaModelOperations = 'create' | 'update';
