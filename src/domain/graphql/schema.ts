@@ -5,6 +5,7 @@ import { mergeTypeDefs, mergeResolvers } from '@graphql-tools/merge';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import gql from 'graphql-tag';
 import { preferenceResolvers } from '../modules/preference/resolvers';
+import { repositoryResolvers } from '../modules/repository/resolvers';
 import { securityResolvers } from '../modules/security/resolvers';
 import { userResolvers } from '../modules/user/resolvers';
 import { utilsResolvers } from '../modules/utils/resolvers';
@@ -25,13 +26,23 @@ const securitySchema = gql(
 const preferenceSchema = gql(
   fs.readFileSync(path.join(__dirname, '../modules/preference/schema.graphql'), 'utf-8'),
 );
+const repositorySchema = gql(
+  fs.readFileSync(path.join(__dirname, '../modules/repository/schema.graphql'), 'utf-8'),
+);
 
-const typeDefs = mergeTypeDefs([userSchema, utilsSchema, securitySchema, preferenceSchema]);
+const typeDefs = mergeTypeDefs([
+  userSchema,
+  utilsSchema,
+  securitySchema,
+  preferenceSchema,
+  repositorySchema,
+]);
 const resolvers = mergeResolvers([
   userResolvers,
   utilsResolvers,
   securityResolvers,
   preferenceResolvers,
+  repositoryResolvers,
 ]);
 
 let schema = makeExecutableSchema({

@@ -25,3 +25,8 @@ export const formattedUTCTime = (timeArg: string | Date): string => {
   };
   return new Date(timeArg).toLocaleDateString(undefined, options);
 };
+
+export const formateTimeToIso = (timeArg: string | Date): string => {
+  const date = new Date(timeArg);
+  return date.toISOString();
+};

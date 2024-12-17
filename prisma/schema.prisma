@@ -100,8 +100,8 @@ model ReleaseInfo {
   id           String     @id @default(uuid())
   version      String
   url          String
-  notes        String
-  date         DateTime   @db.Timestamptz
+  notes        String?
+  date         DateTime?   @db.Timestamptz
   repository   Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   repositoryId String
   createdAt    DateTime   @default(now()) @db.Timestamptz

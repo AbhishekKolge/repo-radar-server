@@ -4,7 +4,8 @@
     "./src/domain/modules/user/schema.graphql",
     "./src/domain/modules/utils/schema.graphql",
     "./src/domain/modules/security/schema.graphql",
-    "./src/domain/modules/preference/schema.graphql"
+    "./src/domain/modules/preference/schema.graphql",
+    "./src/domain/modules/repository/schema.graphql"
   ],
   "documents": null,
   "generates": {
@@ -16,7 +17,10 @@
           "User": "../modules/user/types/entity#UserEntity",
           "Country": "../modules/utils/types/entity#CountryEntity",
           "Security": "../modules/security/types/entity#SecurityEntity",
-          "Preference": "../modules/preference/types/entity#PreferenceEntity"
+          "Preference": "../modules/preference/types/entity#PreferenceEntity",
+          "Repository": "../modules/repository/types/entity#RepositoryEntity",
+          "ReleaseInfo": "../modules/repository/types/entity#ReleaseInfoEntity",
+          "Commit": "../modules/repository/types/entity#CommitEntity"
         },
         "skipTypename": true
       }

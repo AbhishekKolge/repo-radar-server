@@ -1,2 +1,2 @@
 export * from './upload.dto';
-export * from './octokit.dto';
+export * from './github.dto';
