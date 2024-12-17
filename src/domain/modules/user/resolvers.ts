@@ -1,22 +1,29 @@
-import { getUser, getUserContactCountry, updateUser } from './controllers';
+import { CountryService } from '../utils/service';
+import { UserService } from './service';
 import { Resolvers } from 'src/domain/graphql';
 import { AuthUser } from 'src/infrastructure/shared/types';
 
 export const userResolvers: Resolvers = {
   Query: {
     profile: (_root, _, { user }) => {
-      return getUser(user as AuthUser);
+      const userService = new UserService();
+      return userService.getUserById((user as AuthUser).id);
     },
   },
   Mutation: {
     updateProfile: (_root, { input: details }, { user }) => {
-      return updateUser(user as AuthUser, details);
+      const userService = new UserService();
+      return userService.updateUserById((user as AuthUser).id, details);
     },
   },
 
   User: {
     contactCountry: (user) => {
-      return getUserContactCountry(user.contactCountryId);
+      if (!user.contactCountryId) {
+        return null;
+      }
+      const countryService = new CountryService();
+      return countryService.getCountryById(user.contactCountryId);
     },
     dob: (user) => {
       if (user.dob) {
