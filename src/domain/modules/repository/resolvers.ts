@@ -32,8 +32,13 @@ export const repositoryResolvers: Resolvers = {
       const repositoryService = new RepositoryService();
       return repositoryService.getLatestRepositoryRelease(repository.id);
     },
-    archived: (repository, _, { repositoryStatusLoader, user }) => {
-      return repositoryStatusLoader.load([repository.id, (user as AuthUser).id]);
+    archived: async (repository, _, { repositoryStatusLoader, user }) => {
+      const status = await repositoryStatusLoader.load([repository.id, (user as AuthUser).id]);
+      return status.archived || false;
+    },
+    viewed: async (repository, _, { repositoryStatusLoader, user }) => {
+      const status = await repositoryStatusLoader.load([repository.id, (user as AuthUser).id]);
+      return status.viewed || false;
     },
     releases: (repository, _, { releaseInfoLoader }) => {
       return releaseInfoLoader.load(repository.id);

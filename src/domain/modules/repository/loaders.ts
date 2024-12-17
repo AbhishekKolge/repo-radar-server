@@ -1,4 +1,4 @@
-import { ReleaseInfo } from '@prisma/client';
+import { ReleaseInfo, RepositoryUser } from '@prisma/client';
 import DataLoader from 'dataloader';
 import { RepositoryService } from './service';
 import { CommitResponse } from './types';
@@ -16,7 +16,7 @@ export const createReleaseInfoLoader = () => {
 };
 
 export const createRepositoryStatusLoader = () => {
-  return new DataLoader<[string, string], boolean>(
+  return new DataLoader<[string, string], RepositoryUser>(
     (keys: readonly [string, string][]) => {
       const repositoryService = new RepositoryService();
       const userIds = keys.map(([_repositoryId, userId]) => userId);

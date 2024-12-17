@@ -139,6 +139,7 @@ export type Repository = {
   ownerUrl: Scalars['String']['output'];
   releases?: Maybe<Array<Maybe<ReleaseInfo>>>;
   sshCloneUrl: Scalars['String']['output'];
+  viewed: Scalars['Boolean']['output'];
 };
 
 export type RepositoryQueryParams = {
@@ -147,6 +148,7 @@ export type RepositoryQueryParams = {
   search?: InputMaybe<Scalars['String']['input']>;
   sortKey?: InputMaybe<Scalars['String']['input']>;
   sortMethod?: InputMaybe<Scalars['String']['input']>;
+  viewed?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type Security = {
@@ -170,6 +172,7 @@ export type UpdateProfileInput = {
 
 export type UpdateRepositoryStatusInput = {
   archived: Scalars['Boolean']['input'];
+  viewed: Scalars['Boolean']['input'];
 };
 
 export type UpdateSecurityInput = {
@@ -400,6 +403,7 @@ export type RepositoryResolvers<ContextType = ResolverContext, ParentType extend
   ownerUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   releases?: Resolver<Maybe<Array<Maybe<ResolversTypes['ReleaseInfo']>>>, ParentType, ContextType>;
   sshCloneUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  viewed?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
