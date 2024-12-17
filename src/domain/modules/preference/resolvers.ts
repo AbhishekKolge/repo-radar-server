@@ -1,16 +1,18 @@
-import { getUserPreference, updateUserPreference } from './controller';
+import { PreferenceService } from './service';
 import { Resolvers } from 'src/domain/graphql';
 import { AuthUser } from 'src/infrastructure/shared/types';
 
 export const preferenceResolvers: Resolvers = {
   Query: {
     preference: (_root, _, { user }) => {
-      return getUserPreference(user as AuthUser);
+      const preferenceService = new PreferenceService();
+      return preferenceService.getPreferenceByUserId((user as AuthUser).id);
     },
   },
   Mutation: {
     updatePreference: (_root, { input: details }, { user }) => {
-      return updateUserPreference(user as AuthUser, details);
+      const preferenceService = new PreferenceService();
+      return preferenceService.updatePreferenceByUserId((user as AuthUser).id, details);
     },
   },
 

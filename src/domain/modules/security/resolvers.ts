@@ -1,16 +1,18 @@
-import { getUserSecurity, updateUserSecurity } from './controller';
+import { SecurityService } from './service';
 import { Resolvers } from 'src/domain/graphql';
 import { AuthUser } from 'src/infrastructure/shared/types';
 
 export const securityResolvers: Resolvers = {
   Query: {
     security: (_root, _, { user }) => {
-      return getUserSecurity(user as AuthUser);
+      const securityService = new SecurityService();
+      return securityService.getSecurityByUserId((user as AuthUser).id);
     },
   },
   Mutation: {
     updateSecurity: (_root, { input: details }, { user }) => {
-      return updateUserSecurity(user as AuthUser, details);
+      const securityService = new SecurityService();
+      return securityService.updateSecurityByUserId((user as AuthUser).id, details);
     },
   },
 
