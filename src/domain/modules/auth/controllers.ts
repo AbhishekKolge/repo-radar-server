@@ -16,8 +16,11 @@ export const githubLogin = async (req: Request, res: Response) => {
     const token = getJWTToken(tokenUser);
 
     const success = {
-      token,
       success: String(true),
+      id: user.id,
+      username: user.username,
+      profileImageUrl: String(user.profileImageUrl),
+      token,
     };
 
     const successQueryString = new URLSearchParams(success).toString();
